@@ -29,7 +29,7 @@ vi /etc/sysconfig/network-scripts/ifcfg-eth0
 # 可选，修改BOOTPROTO为static
 sed -i 's/^BOOTPROTO=dhcp/BOOTPROTO=static/g' /etc/sysconfig/network-scripts/ifcfg-eth0
 # 可选，增加固定IP项
-cat << EOF > /etc/docker/daemon.json
+cat << EOF >> /etc/docker/daemon.json
 IPADDR=192.168.57.193
 NETMASK=255.255.255.0
 GATEWAY=192.168.57.1
@@ -68,7 +68,7 @@ bash auto-install-aliyun-rancher-master.sh
 bash auto-install-aliyun-rancher-worker.sh
 
 # 增加节点
-ansible-files/install-rancher-aliyun-worker.yml屏蔽[rancher-worker]已经安装过的主机，增加需要新增的主机，安装好后把屏蔽的主机接触屏蔽
+ansible-files/install-rancher-aliyun-worker.yml屏蔽[rancher-worker]已经安装过的主机，增加需要新增的主机，安装好后把屏蔽的主机接触屏蔽
 # 安装worker
 bash auto-install-aliyun-rancher-worker.sh
 ```
@@ -88,7 +88,7 @@ bash auto-install-local-rancher-master.sh
 bash auto-install-local-rancher-worker.sh
 
 # 增加节点
-ansible-files/install-rancher-local-worker.yml屏蔽[rancher-worker]已经安装过的主机，增加需要新增的主机，安装好后把屏蔽的主机接触屏蔽
+ansible-files/install-rancher-local-worker.yml屏蔽[rancher-worker]已经安装过的主机，增加需要新增的主机，安装好后把屏蔽的主机接触屏蔽
 # 安装worker
 bash auto-install-local-rancher-worker.sh
 ```
@@ -106,4 +106,10 @@ bash ./rancher-load-images.sh --image-list ./rancher-images.txt --registry <REGI
 cd rancher-files
 sort -u rancher-images.txt -o rancher-images.txt
 bash ./rancher-save-images.sh --image-list ./rancher-images.txt
+```
+## 下载私有仓镜像
+```shell
+cd rancher-files
+docker pull registry:latest
+docker save -o registry-latest.tar.gz registry/latest
 ```
