@@ -3,7 +3,7 @@
 - Docker：18.09/19.03  
 - Rancher：2.4.5  
 - k8s：1.18  
-- 磁盘空间：worker 20G/master 50G
+- 磁盘空间：worker 20G/master 50G
 - 内存：worker 4G/master 2G
 - CPU：2核
 - istio：内存>6G，CPU>5核
