@@ -1,0 +1,10 @@
+# install-rsync.yml
+---
+- hosts: all
+  tasks:
+    - name: install rsync
+      shell: yum install -y rsync
+      register: shell_result
+
+    - debug:
+        var: shell_result.stdout_lines

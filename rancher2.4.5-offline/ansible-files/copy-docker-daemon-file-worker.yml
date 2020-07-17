@@ -1,0 +1,15 @@
+# copy-docker-daemon-file.yml
+---
+- hosts: rancher-worker
+  tasks:
+    - name: mkdir docker 
+      shell: mkdir -p /etc/docker
+      register: shell_result
+    - name: copy docker daemon file to rancher worker
+      synchronize:
+        src: /etc/docker/daemon.json
+        dest: /etc/docker/daemon.json
+      register: shell_result
+
+    - debug:
+        var: shell_result.stdout_lines

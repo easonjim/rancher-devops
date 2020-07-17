@@ -1,0 +1,13 @@
+# install-rancher-aliyun-worker.yml
+---
+- hosts: rancher-worker
+  vars: 
+    rancher_master: 192.168.58.101
+    rancher_token: asdfasdf11231231sdfadsf123123
+  tasks:
+    - name: install rancher worker
+      shell: docker run -d --privileged --restart=unless-stopped --net=host -v /etc/kubernetes:/etc/kubernetes -v /var/run:/var/run rancher/rancher-agent:v2.4.5 --server https://{{ rancher_master }} --token h --ca-checksum {{ rancher_token }} --etcd --controlplane --worker
+      register: shell_result
+
+    - debug:
+        var: shell_result.stdout_lines

@@ -1,0 +1,10 @@
+# install-deps-local.yml
+---
+- hosts: rancher-worker
+  tasks:
+    - name: install deps local
+      shell: bash /root/rancher2.4.5-offline/auto-install-local-deps.sh
+      register: shell_result
+
+    - debug:
+        var: shell_result.stdout_lines

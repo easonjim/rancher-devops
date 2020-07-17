@@ -1,0 +1,15 @@
+# install-rsync.yml
+---
+- hosts: all
+  tasks:
+    - name: copy rsync to host
+      copy:
+        src: ../deps-local/rsync
+        dest: /tmp
+      register: shell_result
+    - name: install rsync
+      shell: rpm -ivh /tmp/rsync/*.rpm --force
+      register: shell_result
+
+    - debug:
+        var: shell_result.stdout_lines

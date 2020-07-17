@@ -1,0 +1,14 @@
+# copy-deps-file.yml
+---
+- hosts: rancher-worker
+  tasks:
+    - name: copy deps file to rancher worker
+      synchronize:
+        src: /root/rancher2.4.5-offline
+        dest: /root/
+        rsync_opts:
+            - "--exclude=rancher-files"
+      register: shell_result
+
+    - debug:
+        var: shell_result.stdout_lines

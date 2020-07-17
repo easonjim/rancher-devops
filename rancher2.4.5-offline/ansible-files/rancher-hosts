@@ -1,0 +1,5 @@
+[rancher-master]
+192.168.57.101 ansible_ssh_user="root" ansible_ssh_pass="123456"
+
+[rancher-worker]
+192.168.57.102 ansible_ssh_user="root" ansible_ssh_pass="123456"
