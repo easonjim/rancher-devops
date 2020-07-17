@@ -3,10 +3,11 @@
 - hosts: rancher-worker
   vars: 
     rancher_master: 192.168.58.101
-    rancher_token: asdfasdf11231231sdfadsf123123
+    rancher_token: g22thlrgz88hszdl2j64qf8v9dgnl9g4hjfg7wgcw7rt5x9sgwkbst
+    rancher_ca_checksum: a58743d8df583ece0924fa2d6ea3266d36767fe4b414b3f067a24b1d82f5400b
   tasks:
     - name: install rancher worker
-      shell: docker run -d --privileged --restart=unless-stopped --net=host -v /etc/kubernetes:/etc/kubernetes -v /var/run:/var/run rancher/rancher-agent:v2.4.5 --server https://{{ rancher_master }} --token h --ca-checksum {{ rancher_token }} --etcd --controlplane --worker
+      shell: docker run -d --privileged --restart=unless-stopped --net=host -v /etc/kubernetes:/etc/kubernetes -v /var/run:/var/run rancher/rancher-agent:v2.4.5 --server https://{{ rancher_master }} --token {{ rancher_token }} --ca-checksum {{ rancher_ca_checksum }} --etcd --controlplane --worker
       register: shell_result
 
     - debug:

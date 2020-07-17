@@ -30,7 +30,7 @@ vi /etc/sysconfig/network-scripts/ifcfg-eth0
 # 可选，修改BOOTPROTO为static
 sed -i 's/^BOOTPROTO=dhcp/BOOTPROTO=static/g' /etc/sysconfig/network-scripts/ifcfg-eth0
 # 可选，增加固定IP项
-# 注意：机器必须要有默认网关
+# 注意：每个节点必须有默认网关
 cat << EOF >> /etc/docker/daemon.json
 IPADDR=192.168.57.193
 NETMASK=255.255.255.0
@@ -54,6 +54,7 @@ chronyc -a makestep
 reboot
 ```
 # 离线镜像下载
+##### 说明：采用外网安装时无需下载  
 参考：[官方教程](https://rancher2.docs.rancher.cn/docs/installation/other-installation-methods/air-gap/populate-private-registry/_index)  
 文件：[下载链接](https://github.com/rancher/rancher/releases)
 ## 下载离线镜像
@@ -68,7 +69,7 @@ cd rancher-files
 docker pull registry:latest
 docker save -o registry-latest.tar.gz registry/latest
 ```
-## 离线文件（可选，和上面镜像保持一致）
+## 离线镜像加速
 ```
 链接: https://pan.baidu.com/s/1D0Q3BOJZBil1v248ouFrZg 提取码: rks4
 说明：下载后解压到rancher-files文件夹

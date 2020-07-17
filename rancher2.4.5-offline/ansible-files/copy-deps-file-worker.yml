@@ -8,6 +8,8 @@
         dest: /root/
         rsync_opts:
             - "--exclude=rancher-files"
+            - "--exclude=ansible-files"
+            - "--exclude=*.log"
       register: shell_result
 
     - debug:
