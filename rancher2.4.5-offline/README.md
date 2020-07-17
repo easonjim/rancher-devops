@@ -1,12 +1,13 @@
 # 系统版本要求
-CentOS：7.4/7.5/7.6/7.7  
-Docker：18.09/19.03  
-Rancher：2.4.5  
-k8s：1.17/1.18  
-磁盘空间：50G
-内存：4G（master 2G）
-CPU：2核
-# 初始化设置
+- CentOS：7.4/7.5/7.6/7.7  
+- Docker：18.09/19.03  
+- Rancher：2.4.5  
+- k8s：1.18  
+- 磁盘空间：worker 20G/master 50G
+- 内存：worker 4G/master 2G
+- CPU：2核
+- istio：内存>6G，CPU>5核
+# 初始化设置（可选，自动化脚本已包含初始化设置）
 ## 设置hostname
 ```shell
 hostnamectl set-hostname rancher-node{n}
@@ -51,6 +52,32 @@ chronyc -a makestep
 ```shell
 reboot
 ```
+# 离线镜像下载
+参考：[官方教程](https://rancher2.docs.rancher.cn/docs/installation/other-installation-methods/air-gap/populate-private-registry/_index)  
+文件：[下载链接](https://github.com/rancher/rancher/releases)
+## 下载离线镜像
+```shell
+cd rancher-files
+sort -u rancher-images.txt -o rancher-images.txt
+bash ./rancher-save-images.sh --image-list ./rancher-images.txt
+```
+## 下载私有仓镜像
+```shell
+cd rancher-files
+docker pull registry:latest
+docker save -o registry-latest.tar.gz registry/latest
+```
+## 离线文件（可选，和上面镜像保持一致）
+```
+链接: https://pan.baidu.com/s/1D0Q3BOJZBil1v248ouFrZg 提取码: rks4
+说明：下载后解压到rancher-files文件夹
+```
+## 同步离线镜像到私有仓库（可选，自动化脚本已包含自动导入）
+```shell
+cd rancher-files
+docker login <REGISTRY.YOURDOMAIN.COM:PORT>
+bash ./rancher-load-images.sh --image-list ./rancher-images.txt --registry <REGISTRY.YOURDOMAIN.COM:PORT>
+```
 # 自动化安装
 ## 外网
 ```shell
@@ -88,28 +115,7 @@ bash auto-install-local-rancher-master.sh
 bash auto-install-local-rancher-worker.sh
 
 # 增加节点
-ansible-files/install-rancher-local-worker.yml屏蔽[rancher-worker]已经安装过的主机，增加需要新增的主机，安装好后把屏蔽的主机接触屏蔽
+ansible-files/install-rancher-local-worker.yml屏蔽[rancher-worker]已经安装过的主机，增加需要新增的主机，安装好后把屏蔽的主机解除屏蔽
 # 安装worker
 bash auto-install-local-rancher-worker.sh
-```
-# 其它操作
-参考：[官方教程](https://rancher2.docs.rancher.cn/docs/installation/other-installation-methods/air-gap/populate-private-registry/_index)  
-文件：[下载链接](https://github.com/rancher/rancher/releases)
-## 同步离线镜像到私有仓库
-```shell
-cd rancher-files
-docker login <REGISTRY.YOURDOMAIN.COM:PORT>
-bash ./rancher-load-images.sh --image-list ./rancher-images.txt --registry <REGISTRY.YOURDOMAIN.COM:PORT>
-```
-## 下载离线镜像
-```shell
-cd rancher-files
-sort -u rancher-images.txt -o rancher-images.txt
-bash ./rancher-save-images.sh --image-list ./rancher-images.txt
-```
-## 下载私有仓镜像
-```shell
-cd rancher-files
-docker pull registry:latest
-docker save -o registry-latest.tar.gz registry/latest
 ```
