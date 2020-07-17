@@ -30,6 +30,7 @@ vi /etc/sysconfig/network-scripts/ifcfg-eth0
 # 可选，修改BOOTPROTO为static
 sed -i 's/^BOOTPROTO=dhcp/BOOTPROTO=static/g' /etc/sysconfig/network-scripts/ifcfg-eth0
 # 可选，增加固定IP项
+# 注意：机器必须要有默认网关
 cat << EOF >> /etc/docker/daemon.json
 IPADDR=192.168.57.193
 NETMASK=255.255.255.0
@@ -95,7 +96,7 @@ bash auto-install-aliyun-rancher-master.sh
 bash auto-install-aliyun-rancher-worker.sh
 
 # 增加节点
-ansible-files/install-rancher-aliyun-worker.yml屏蔽[rancher-worker]已经安装过的主机，增加需要新增的主机，安装好后把屏蔽的主机接触屏蔽
+ansible-files/install-rancher-aliyun-worker.yml屏蔽[rancher-worker]已经安装过的主机，增加需要新增的主机，安装好后把屏蔽的主机解除屏蔽
 # 安装worker
 bash auto-install-aliyun-rancher-worker.sh
 ```
