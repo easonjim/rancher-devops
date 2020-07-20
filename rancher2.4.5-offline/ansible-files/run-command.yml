@@ -1,0 +1,11 @@
+# run-command.yml
+# --extra-vars "host=test cmd='df -h'" / -e
+---
+- hosts: '{{ host }}'
+  tasks:
+    - name: run command to hosts
+      shell: '{{ cmd }}'
+      register: shell_result
+
+    - debug:
+        var: shell_result.stdout_lines
