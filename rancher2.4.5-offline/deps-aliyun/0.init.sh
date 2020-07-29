@@ -20,12 +20,13 @@ a=`echo $ip | awk -F'.' '{print $1}' | awk '{printf("%03d\n",$0)}' `
 b=`echo $ip | awk -F'.' '{print $2}' | awk '{printf("%03d\n",$0)}' `
 c=`echo $ip | awk -F'.' '{print $3}' | awk '{printf("%03d\n",$0)}' `
 d=`echo $ip | awk -F'.' '{print $4}' | awk '{printf("%03d\n",$0)}' `
+new_ip=`echo $ip | awk -F' ' '{print $1}'`
 hostname_new="node-${a}${b}${c}${d}"
 hostnamectl set-hostname ${hostname_new}
 if [ `grep -c "${hostname_new}" /etc/hosts` -eq '0' ]; then
-    echo ${ip} ${hostname_new} >> /etc/hosts
+    echo >> /etc/hosts
+    echo ${new_ip} ${hostname_new} >> /etc/hosts
 fi
-
 # check network
 ret_code=`curl -I -s --connect-timeout 60 www.baidu.com -w %{http_code} | tail -n1`
 if [ "x$ret_code" != "*200*" ]; then
