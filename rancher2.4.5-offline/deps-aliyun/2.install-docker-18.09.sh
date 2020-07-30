@@ -1,6 +1,16 @@
 #!/bin/sh
 set -e
 
+# remove 
+yum -y remove docker \
+                  docker-client \
+                  docker-client-latest \
+                  docker-common \
+                  docker-latest \
+                  docker-latest-logrotate \
+                  docker-logrotate \
+                  docker-engine
+
 CHANNEL="stable"
 
 docker_version=18.09.9

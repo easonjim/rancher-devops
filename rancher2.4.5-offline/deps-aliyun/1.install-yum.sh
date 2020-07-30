@@ -13,3 +13,4 @@ yum clean all
 yum makecache
 
 yum install -y container-selinux
+yum install -y libseccomp
