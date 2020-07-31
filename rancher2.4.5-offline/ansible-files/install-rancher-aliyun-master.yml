@@ -1,9 +1,11 @@
 # install-rancher-aliyun-master.yml
 ---
 - hosts: rancher-master
+  vars: 
+    data_home: /home/rancher/
   tasks:
     - name: install rancher master
-      shell: docker run -d --restart=unless-stopped -p 80:80 -p 443:443 -v /home/rancher/:/var/lib/rancher/ rancher/rancher:v2.4.5
+      shell: docker run -d --restart=unless-stopped -p 80:80 -p 443:443 -v {{ data_home }}:/var/lib/rancher/ rancher/rancher:v2.4.5
       register: shell_result
 
     - debug:

@@ -22,7 +22,7 @@ if [ `grep -c "${hostname_new}" /etc/hosts` -eq '0' ]; then
     echo ${new_ip} ${hostname_new} >> /etc/hosts
 fi
 # check network
-gateway_count=`route | grep 'default' | wc -l`
+gateway_count=`ip route | grep 'default' | wc -l`
 if [ ${gateway_count} -eq 0 ]; then
     echo The network does not have a default gateway, please check!
     exit -1

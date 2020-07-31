@@ -2,10 +2,11 @@
 ---
 - hosts: rancher-master
   vars: 
+    data_home: /home/rancher/
     registry_host: 192.168.58.101:5000
   tasks:
     - name: install rancher master
-      shell: docker run -d --restart=unless-stopped -p 80:80 -p 443:443 -v /home/rancher/:/var/lib/rancher/ -e CATTLE_SYSTEM_DEFAULT_REGISTRY={{ registry_host }} -e CATTLE_SYSTEM_CATALOG=bundled {{ registry_host }}/rancher/rancher:v2.4.5
+      shell: docker run -d --restart=unless-stopped -p 80:80 -p 443:443 -v {{ data_home }}:/var/lib/rancher/ -e CATTLE_SYSTEM_DEFAULT_REGISTRY={{ registry_host }} -e CATTLE_SYSTEM_CATALOG=bundled {{ registry_host }}/rancher/rancher:v2.4.5
       register: shell_result
 
     - debug:
