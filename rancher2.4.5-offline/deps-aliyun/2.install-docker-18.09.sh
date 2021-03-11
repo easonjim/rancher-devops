@@ -3,13 +3,14 @@ set -e
 
 # remove 
 yum -y remove docker \
-                  docker-client \
-                  docker-client-latest \
-                  docker-common \
-                  docker-latest \
-                  docker-latest-logrotate \
-                  docker-logrotate \
-                  docker-engine
+				docker-client \
+				docker-client-latest \
+				docker-common \
+				docker-latest \
+				docker-latest-logrotate \
+				docker-logrotate \
+				docker-engine \
+				docker-ce-cli
 
 CHANNEL="stable"
 
@@ -387,10 +388,12 @@ do_install() {
 				$sh_c "apt-get install -y -q docker-ce=${pkg_version} docker-ce-cli=${pkg_version}"
 			)
 			echo_docker_as_nonroot
+			post_setting
 			exit 0
 			;;
 		centos|fedora|redhat|oraclelinux)
-			yum_repo="https://download.docker.com/linux/centos/docker-ce.repo"
+			# yum_repo="https://download.docker.com/linux/centos/docker-ce.repo"
+			yum_repo="https://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo"
 			if [ "$lsb_dist" = "fedora" ]; then
 				if [ "$dist_version" -lt "24" ]; then
 					echo "Error: Only Fedora >=24 are supported by $url"
@@ -404,7 +407,7 @@ do_install() {
 				pkg_manager="yum"
 				config_manager="yum-config-manager"
 				enable_channel_flag="--enable"
-				pre_reqs="yum-utils"
+				pre_reqs="yum-utils device-mapper-persistent-data lvm2"
 			fi
 			(
 				set -x
@@ -415,6 +418,7 @@ do_install() {
                                 fi
 				$sh_c "$pkg_manager install -y -q $pre_reqs"
 				$sh_c "$config_manager --add-repo $yum_repo"
+				$sh_c "sed -i 's+download.docker.com+mirrors.aliyun.com/docker-ce+' /etc/yum.repos.d/docker-ce.repo"
 				if [ "$CHANNEL" != "stable" ]; then
 					echo "Info: Enabling channel '$CHANNEL' for docker-ce repo"
 					$sh_c "$config_manager $enable_channel_flag docker-ce-$CHANNEL"
@@ -428,6 +432,7 @@ do_install() {
 				fi
 			)
 			echo_docker_as_nonroot
+			post_setting
 			exit 0
 			;;
 		raspbian)
@@ -508,6 +513,7 @@ do_install() {
 			$sh_c 'sleep 3; apt-get update; apt-get install -y -q docker-engine'
 			)
 			echo_docker_as_nonroot
+			post_setting
 			exit 0
 			;;
 		rancheros)
@@ -519,6 +525,7 @@ do_install() {
 				$sh_c "ros engine switch -f $engine_version"
 			fi
 			)
+			post_setting
 			exit 0
 			;;
 	esac
@@ -533,16 +540,14 @@ do_install() {
 	https://docs.docker.com/engine/installation/
 
 	EOF
+	
 	exit 1
 }
 
-# wrapped up in a function so that we have some protection against only getting
-# half the file during "curl | sh"
-do_install
-
 # post setting
-mkdir -p /etc/docker
-cat << EOF > /etc/docker/daemon.json
+post_setting() {
+	mkdir -p /etc/docker
+	cat << EOF > /etc/docker/daemon.json
 {
 "registry-mirrors": [
 "https://kfwkfulq.mirror.aliyuncs.com",
@@ -553,6 +558,10 @@ cat << EOF > /etc/docker/daemon.json
 ]
 }
 EOF
+	systemctl enable docker
+	systemctl restart docker
+}
 
-systemctl enable docker
-systemctl restart docker
+# wrapped up in a function so that we have some protection against only getting
+# half the file during "curl | sh"
+do_install

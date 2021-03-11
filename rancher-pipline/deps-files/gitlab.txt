@@ -1,0 +1,7 @@
+docker run -d --restart=always --privileged=true \
+    --publish 443:443 --publish 80:80 --publish 22:22 \
+    --name gitlab \
+    --volume /Users/jim/Desktop/gitlab/config:/etc/gitlab \
+    --volume /Users/jim/Desktop/gitlab/logs:/var/log/gitlab \
+    --volume /Users/jim/Desktop/gitlab/data:/var/opt/gitlab \
+    gitlab/gitlab-ce:13.1.4-ce.0

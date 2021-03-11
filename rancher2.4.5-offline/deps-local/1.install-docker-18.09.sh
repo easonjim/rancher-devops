@@ -10,7 +10,8 @@ yum -y remove docker \
                   docker-latest-logrotate \
                   docker-logrotate \
                   docker-engine \
-                  containerd.io
+                  containerd.io \
+                  docker-ce-cli
 
 rpm -ivh selinux-policy/*.rpm --force
 rpm -ivh docker18.9/*.rpm --force

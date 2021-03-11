@@ -19,7 +19,7 @@ bash deps-aliyun/0.init.sh
 
 # install docker by aliyun
 bash deps-aliyun/1.install-yum.sh
-bash deps-aliyun/2.install-docker-18.09.sh
+bash deps-aliyun/2.install-docker-18.09.sh --mirror=Aliyun
 bash deps-aliyun/3.install-jq.sh
 bash deps-aliyun/4.install-ansible.sh
 
